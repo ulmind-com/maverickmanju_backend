@@ -1,0 +1,22 @@
+[project]
+name = "maverickmanju-backend"
+version = "1.0.0"
+description = "FastAPI backend for the Maverick Manju website (gallery, testimonials, services, packages, bookings, admin)."
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "pymongo[srv]>=4.13.0",
+    "pydantic>=2.9.0",
+    "pydantic-settings>=2.6.0",
+    "python-multipart>=0.0.12",
+    "cloudinary>=1.41.0",
+    "pyjwt>=2.9.0",
+    "bcrypt>=4.2.0",
+]
+
+[dependency-groups]
+dev = []
+
+[tool.uv]
+package = false

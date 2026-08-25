@@ -1,0 +1,42 @@
+# Render blueprint. Import this repo as a Blueprint, or create a Web Service
+# manually with the same build and start commands.
+#
+# Every value below marked `sync: false` must be filled in from the Render
+# dashboard (Environment tab) — secrets are never committed to this repo.
+services:
+  - type: web
+    name: maverickmanju-api
+    runtime: python
+    plan: free
+    # uv reads .python-version and fetches its own interpreter, so this works
+    # regardless of which Python Render's image ships with.
+    buildCommand: pip install uv && uv sync --frozen --no-dev
+    startCommand: uv run uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: MONGODB_URI
+        sync: false
+      - key: MONGODB_DB
+        value: maverickmanju
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: CLOUDINARY_FOLDER
+        value: maverickmanju
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRE_MINUTES
+        value: "10080"
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: ADMIN_NAME
+        value: Maverick Manju
+      - key: CORS_ORIGINS
+        sync: false
+      - key: MAX_UPLOAD_MB
+        value: "100"

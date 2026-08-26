@@ -9,9 +9,9 @@ PublishStatus = Literal["published", "draft"]
 GalleryLayout = Literal["small", "medium", "large", "tall", "wide"]
 BookingStatus = Literal["new", "contacted", "confirmed", "completed", "cancelled"]
 
-# The four headings testimonials are grouped under on the public page.
-TestimonialCategory = Literal["School", "Corporates", "Children", "Birthday Parties"]
-TESTIMONIAL_CATEGORIES = ("School", "Corporates", "Children", "Birthday Parties")
+# The headings gallery items are grouped under on the public page, in display order.
+GalleryCategory = Literal["Stage Magic", "Emcee", "Walk Around"]
+GALLERY_CATEGORIES = ("Stage Magic", "Emcee", "Walk Around")
 
 SERVICE_SLUGS = ("stage-magic", "walk-around-magic", "mentalism", "emcee")
 
@@ -40,6 +40,7 @@ class PasswordChangeIn(Strict):
 # --- gallery ------------------------------------------------------------
 class GalleryIn(Strict):
     type: MediaType = "image"
+    category: GalleryCategory = "Stage Magic"
     title: str = ""
     description: str = ""
     mediaUrl: str = Field(min_length=1)
@@ -53,6 +54,7 @@ class GalleryIn(Strict):
 
 class GalleryPatch(Strict):
     type: MediaType | None = None
+    category: GalleryCategory | None = None
     title: str | None = None
     description: str | None = None
     mediaUrl: str | None = None
@@ -66,7 +68,6 @@ class GalleryPatch(Strict):
 
 # --- testimonials -------------------------------------------------------
 class TestimonialIn(Strict):
-    category: TestimonialCategory = "Corporates"
     clientName: str = ""
     company: str = ""
     role: str = ""
@@ -82,7 +83,6 @@ class TestimonialIn(Strict):
 
 
 class TestimonialPatch(Strict):
-    category: TestimonialCategory | None = None
     clientName: str | None = None
     company: str | None = None
     role: str | None = None

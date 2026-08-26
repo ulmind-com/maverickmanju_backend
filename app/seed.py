@@ -240,8 +240,18 @@ async def seed_settings() -> None:
     )
 
 
+async def backfill_gallery_categories() -> None:
+    """Gallery items predating categories default to the first heading, so nothing
+    an admin already uploaded disappears from the grouped public page."""
+    await db.gallery().update_many(
+        {"$or": [{"category": {"$exists": False}}, {"category": None}]},
+        {"$set": {"category": "Stage Magic"}},
+    )
+
+
 async def run() -> None:
     await seed_admin()
     await seed_service_images()
     await seed_packages()
     await seed_settings()
+    await backfill_gallery_categories()

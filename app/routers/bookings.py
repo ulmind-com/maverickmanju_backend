@@ -1,8 +1,9 @@
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, HTTPException, Query
 
 from .. import crud, db
 from ..schemas import BookingIn, BookingPatch
 from ..security import current_admin
+from .availability import is_blocked
 
 public = APIRouter(prefix="/api/bookings", tags=["bookings"])
 admin = APIRouter(
@@ -13,6 +14,13 @@ admin = APIRouter(
 @public.post("", status_code=201)
 async def create_booking(payload: BookingIn):
     """Public booking form submission. Returns the reference number to show the guest."""
+    # Enforced here as well as in the UI — the form can be bypassed, this cannot.
+    if await is_blocked(payload.date):
+        raise HTTPException(
+            status_code=409,
+            detail="That date is already booked. Please pick another date.",
+        )
+
     sequence = await db.next_sequence("booking")
     doc = {
         **payload.model_dump(),

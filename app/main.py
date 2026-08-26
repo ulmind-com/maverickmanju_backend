@@ -7,7 +7,17 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from . import db, seed
 from .config import settings
-from .routers import auth, bookings, gallery, packages, services, settings as site, testimonials, uploads
+from .routers import (
+    auth,
+    availability,
+    bookings,
+    gallery,
+    packages,
+    services,
+    settings as site,
+    testimonials,
+    uploads,
+)
 
 
 @asynccontextmanager
@@ -47,6 +57,8 @@ for router in (
     packages.admin,
     bookings.public,
     bookings.admin,
+    availability.public,
+    availability.admin,
     site.public,
     site.admin,
     uploads.router,

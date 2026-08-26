@@ -150,6 +150,20 @@ class BookingPatch(Strict):
     internalNote: str | None = None
 
 
+# --- availability -------------------------------------------------------
+class BlockedDateIn(Strict):
+    """A single calendar day the artist is not available on. `date` is a plain
+    YYYY-MM-DD string — no timezone maths, the same value the date input sends."""
+
+    date: str = Field(pattern=r"^\d{4}-\d{2}-\d{2}$")
+    note: str = ""
+
+
+class BlockedDatesIn(Strict):
+    dates: list[str] = Field(default_factory=list, max_length=366)
+    note: str = ""
+
+
 # --- site settings ------------------------------------------------------
 class SiteSettingsIn(Strict):
     artistName: str = "Maverick Manju"

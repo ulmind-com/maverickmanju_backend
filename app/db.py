@@ -45,6 +45,10 @@ def bookings():
     return db()["bookings"]
 
 
+def blocked_dates():
+    return db()["blocked_dates"]
+
+
 def site_settings():
     return db()["site_settings"]
 
@@ -103,6 +107,7 @@ async def create_indexes() -> None:
     await packages().create_index([("sortOrder", 1), ("createdAt", -1)])
     await bookings().create_index([("createdAt", -1)])
     await bookings().create_index("referenceNumber", unique=True)
+    await blocked_dates().create_index("date", unique=True)
 
 
 async def close() -> None:

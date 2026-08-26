@@ -6,7 +6,7 @@ from pymongo.errors import DuplicateKeyError
 from .. import crud, db
 from ..schemas import BookingIn, BookingPatch
 from ..security import current_admin
-from .availability import is_blocked
+from .availability import block_for_booking, is_blocked
 
 public = APIRouter(prefix="/api/bookings", tags=["bookings"])
 admin = APIRouter(
@@ -77,9 +77,19 @@ async def list_bookings(
 
 @admin.patch("/{booking_id}")
 async def update_booking(booking_id: str, payload: BookingPatch):
-    return await crud.update_doc(
+    booking = await crud.update_doc(
         db.bookings(), booking_id, payload.model_dump(exclude_unset=True)
     )
+
+    # Confirming a booking takes its date off the public calendar automatically.
+    if payload.status == "confirmed":
+        await block_for_booking(
+            booking.get("date", ""),
+            f"Confirmed booking {booking.get('referenceNumber', '')}"
+            f" — {booking.get('name', '')}".strip(" —"),
+        )
+
+    return booking
 
 
 @admin.delete("/{booking_id}", status_code=204)

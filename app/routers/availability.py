@@ -26,6 +26,22 @@ async def is_blocked(date: str) -> bool:
     return await db.blocked_dates().find_one({"date": date}) is not None
 
 
+async def block_for_booking(date: str, note: str) -> None:
+    """Blocks a date on behalf of a confirmed booking.
+
+    Upserts with $setOnInsert so a date the admin had already blocked keeps its
+    own note. Freeing a date stays a manual decision — a cancelled booking does
+    not silently reopen the day.
+    """
+    if not date:
+        return
+    await db.blocked_dates().update_one(
+        {"date": date},
+        {"$setOnInsert": {"date": date, "note": note, "createdAt": db.now()}},
+        upsert=True,
+    )
+
+
 @public.get("")
 async def list_blocked(
     start: str | None = Query(default=None, description="YYYY-MM-DD, inclusive"),

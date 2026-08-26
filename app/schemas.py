@@ -164,3 +164,5 @@ class SiteSettingsIn(Strict):
     defaultBookingMessage: str = ""
     footerCopyright: str = ""
     googleReviewLink: str = ""
+    heroImageUrl: str = ""
+    heroImagePublicId: str = ""

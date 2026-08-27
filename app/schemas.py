@@ -10,8 +10,8 @@ GalleryLayout = Literal["small", "medium", "large", "tall", "wide"]
 BookingStatus = Literal["new", "contacted", "confirmed", "completed", "cancelled"]
 
 # The headings gallery items are grouped under on the public page, in display order.
-GalleryCategory = Literal["Stage Magic", "Emcee", "Walk Around"]
-GALLERY_CATEGORIES = ("Stage Magic", "Emcee", "Walk Around")
+GalleryCategory = Literal["Stage Magic", "Emcee", "Walk Around", "Mentalism"]
+GALLERY_CATEGORIES = ("Stage Magic", "Emcee", "Walk Around", "Mentalism")
 
 SERVICE_SLUGS = ("stage-magic", "walk-around-magic", "mentalism", "emcee")
 
